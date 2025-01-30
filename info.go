@@ -185,7 +185,7 @@ type programJitedInfo struct {
 	// subprograms.
 	//
 	// Available from 4.18.
-	ksyms    []uintptr
+	ksyms    []uint64
 	numKsyms uint32
 
 	// insns holds the JITed machine native instructions of the program,
@@ -344,7 +344,7 @@ func newProgramInfoFromFd(fd *sys.FD) (*ProgramInfo, error) {
 
 	if info.NrJitedKsyms > 0 {
 		pi.jitedInfo.numKsyms = info.NrJitedKsyms
-		pi.jitedInfo.ksyms = make([]uintptr, info.NrJitedKsyms)
+		pi.jitedInfo.ksyms = make([]uint64, info.NrJitedKsyms)
 		info2.JitedKsyms = sys.NewSlicePointer(pi.jitedInfo.ksyms)
 		info2.NrJitedKsyms = info.NrJitedKsyms
 		makeSecondCall = true
@@ -630,7 +630,7 @@ func (pi *ProgramInfo) VerifiedInstructions() (uint32, bool) {
 // programs without subprograms (bpf2bpf calls).
 //
 // The bool return value indicates whether this optional field is available.
-func (pi *ProgramInfo) JitedKsymAddrs() ([]uintptr, bool) {
+func (pi *ProgramInfo) JitedKsymAddrs() ([]uint64, bool) {
 	return pi.jitedInfo.ksyms, len(pi.jitedInfo.ksyms) > 0
 }
 
